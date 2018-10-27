@@ -47,7 +47,7 @@
 #define MAX_READ_SIZE 32
 #define RUN_TIMEOUT    5000L  
 #define GET_TIMEOUT    5000L
-
+#define TIMEOUT     5000L
 ////
 class nRFRemote {
 public:
@@ -61,6 +61,7 @@ void checkConfig();
 void sendConfig();
 void scanKey();
 void writeRF();
+void readAck();
 void run();
 uint8_t  keyState = 0; 
 uint8_t lastState = 0;
@@ -68,6 +69,8 @@ uint8_t  varSlide1 = 0;
 uint8_t  varSlide2 = 0;
 uint8_t  joysticX = 0;
 uint8_t  joystickY = 0;
+bool     ready = true;
+bool     connected = false; 
 private: 
 uint16_t myNode = 1; 
 uint16_t toNode = 2;    

@@ -44,7 +44,7 @@ if (keyState!=lastState)  {   //when any change of keys
  
  varSlide1 = analogRead(SLIDE);
  varSlide1 = map(varSlide1,0,1023,100,0); //map slide to 0-100% 
- 
+
  #if DEBUG 
  Serial.print("Button State change: "); Serial.println(keyState,BIN);
  Serial.print("Slider value : "); Serial.println(varSlide1);
@@ -53,6 +53,13 @@ if (keyState!=lastState)  {   //when any change of keys
  State = RF_WRITE; 
  first_run = true; 
  lastState = keyState; 
+}
+else {
+  if (keyState !=0)  {   // if any key press and hold, still send
+    State = RF_WRITE; 
+    first_run = true; 
+    lastState = keyState;
+  }
 }
 checkConfig(); //check if Config Key is pressed to issue new
 }
@@ -80,7 +87,7 @@ bool OK = radio.RFSend(toNode,buffer,len);
          Serial.print("Sent!.. ");
    #endif
 if (OK) {
-   State = SCAN;  //if onnect and send successfully 
+   State = RF_READ;  //if onnect and send successfully, go to read ack to check when robot action done  
    first_run = true;      //set first run for next State
 
    #ifdef DEBUG 
@@ -100,6 +107,45 @@ else {
      #endif 
    }
  }
+}
+//////////////////////
+void nRFRemote::readAck(){
+int read_size;
+if ( radio.RFDataCome() )  {
+    Serial.println("RF data come!");
+
+    while (radio.RFDataCome()) {
+
+    read_size = radio.RFRead(buffer);
+    if (buffer[0]==0xFF && buffer[1] == 0x55 && buffer[2] == 13 && buffer[3]==10){
+      
+       #ifdef DEBUG 
+    Serial.print("received valid acknowleadge");
+    Serial.println();
+   #endif 
+     State = SCAN;    
+     first_run = true;      //set first run for next State
+    // ready = true;
+    }
+    else if (read_size<4)  {
+      #ifdef DEBUG
+      Serial.println("invalid data received"); 
+      #endif
+     State = SCAN;
+     first_run = true;      //set first run for next State
+    }
+   //Data available, go to Parsing
+   }
+  
+ }
+else {
+  if (millis()-timeStart>TIMEOUT) { // if over timeout not received Ack, skip it and go back to scan key
+    State = SCAN;
+    first_run = true;      //set first run for next State
+
+  }
+}
+
 }
 
 ///////////////////////////////////
@@ -124,7 +170,12 @@ switch (State) {
   writeRF();
   }
   break;
-  
+
+  case RF_READ :{
+  readAck();
+  }
+  break;
+
   case CONFIG :{
   sendConfig();
   }
