@@ -44,11 +44,12 @@ if (keyState!=lastState)  {   //when any change of keys
  
  varSlide1 = analogRead(SLIDE);
  varSlide1 = map(varSlide1,0,1023,100,0); //map slide to 0-100% 
+ 
  #if DEBUG 
  Serial.print("Button State change: "); Serial.println(keyState,BIN);
-  Serial.print("Slider value : "); Serial.println(varSlide1);
-
+ Serial.print("Slider value : "); Serial.println(varSlide1);
  #endif
+
  State = RF_WRITE; 
  first_run = true; 
  lastState = keyState; 
