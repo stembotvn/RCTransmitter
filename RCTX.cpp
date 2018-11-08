@@ -63,7 +63,6 @@ else {
 }
 checkConfig(); //check if Config Key is pressed to issue new
 }
-
 ///////////////////////////////////////////////////////////////
 void nRFRemote::writeRF(){
   index=0;
@@ -116,7 +115,9 @@ if ( radio.RFDataCome() )  {
 
     while (radio.RFDataCome()) {
 
-    read_size = radio.RFRead(buffer);
+    read_size = radio.RFRead(buffer); 
+    }
+
     if (buffer[0]==0xFF && buffer[1] == 0x55 && buffer[2] == 13 && buffer[3]==10){
       
        #ifdef DEBUG 
@@ -135,7 +136,7 @@ if ( radio.RFDataCome() )  {
      first_run = true;      //set first run for next State
     }
    //Data available, go to Parsing
-   }
+   
   
  }
 else {
