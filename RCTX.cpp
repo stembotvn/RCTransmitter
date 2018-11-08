@@ -143,7 +143,9 @@ else {
   if (millis()-timeStart>TIMEOUT) { // if over timeout not received Ack, skip it and go back to scan key
     State = SCAN;
     first_run = true;      //set first run for next State
-
+    #ifdef DEBUG
+      Serial.println("time out");
+    #endif
   }
 }
 

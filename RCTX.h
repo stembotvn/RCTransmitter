@@ -23,10 +23,10 @@
 #define BB    4
 #define BL    5
 #define BR    6
-#define F1    7
-#define F2    8
-#define F3    9
-#define F4    A5
+#define F1    9
+#define F2    7
+#define F3    8
+#define F4    A1
 #define SLIDE A0
 /////State define//////////////////////////////////////////
 #define SCAN    0     //check data from PC     ///
