@@ -43,11 +43,14 @@ bitWrite(keyState,7,!digitalRead(F4));
 if (keyState!=lastState)  {   //when any change of keys
  
  varSlide1 = analogRead(SLIDE);
- varSlide1 = map(varSlide1,0,1023,100,0); //map slide to 0-100% 
+  #if DEBUG 
+ Serial.print("Slider raw value : "); Serial.println(varSlide1);
+ #endif
+ varSlide1 = map(varSlide1,0,255,100,0); //map slide to 0-100% 
 
  #if DEBUG 
  Serial.print("Button State change: "); Serial.println(keyState,BIN);
- Serial.print("Slider value : "); Serial.println(varSlide1);
+ Serial.print("Slider percent : "); Serial.println(varSlide1);
  #endif
 
  State = RF_WRITE; 
