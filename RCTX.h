@@ -65,8 +65,9 @@ void readAck();
 void run();
 uint8_t  keyState = 0; 
 uint8_t lastState = 0;
-uint8_t  varSlide1 = 0;
-uint8_t  varSlide2 = 0;
+int  varSlide1 = 0;
+int  varSlide2 = 0;
+uint8_t  last_varSlide1 = 0;
 uint8_t  joysticX = 0;
 uint8_t  joystickY = 0;
 bool     ready = true;
@@ -79,6 +80,7 @@ uint16_t Default_Addr = DEFAULT_ADDRESS;
 byte index = 0;
 byte dataLen = 0;
 unsigned char buffer[32]; // buffer for serial read data 
+unsigned char Rbuffer[32]; //
 double timeStart; 
 unsigned long timeout = RUN_TIMEOUT; 
 bool first_run = true; 

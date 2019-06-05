@@ -1,6 +1,8 @@
 {
-    "!!! WARNING !!!": "PLEASE DO NOT MODIFY THIS FILE! USE https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags",
     "configurations": [
+        {
+            "name": "!!! WARNING !!! AUTO-GENERATED FILE, PLEASE DO NOT MODIFY IT AND USE https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags"
+        },
         {
             "name": "Win32",
             "includePath": [
@@ -15,6 +17,7 @@
                 "c:/Users/thao/Documents/Arduino/libraries/BlynkESP8266_Lib",
                 "c:/Users/thao/Documents/Arduino/libraries/CayenneLPP",
                 "c:/Users/thao/Documents/Arduino/libraries/CayenneMQTT/src",
+                "c:/Users/thao/Documents/Arduino/libraries/Curibot-Sensor/src",
                 "c:/Users/thao/Documents/Arduino/libraries/DAC_MCP49xx",
                 "c:/Users/thao/Documents/Arduino/libraries/EEPROMEx",
                 "c:/Users/thao/Documents/Arduino/libraries/EasyRF",
@@ -28,6 +31,7 @@
                 "c:/Users/thao/Documents/Arduino/libraries/Spiderbot",
                 "c:/Users/thao/Documents/Arduino/libraries/TinyArm",
                 "c:/Users/thao/Documents/Arduino/libraries/TinyGSM",
+                "c:/Users/thao/Documents/Arduino/libraries/UMake",
                 "c:/Users/thao/Documents/Arduino/libraries/WiFiManager",
                 "c:/Users/thao/Documents/Arduino/libraries/ZowiVbot",
                 "c:/Users/thao/Documents/Arduino/libraries/esp8266BlynkCar",
@@ -59,7 +63,6 @@
                 "C:/Users/thao/.platformio/packages/framework-arduinoavr/libraries/Temboo/src",
                 "C:/Users/thao/.platformio/packages/framework-arduinoavr/libraries/WiFi/src",
                 "C:/Users/thao/.platformio/packages/tool-unity",
-                "c:/Users/thao/Documents/Arduino/libraries/RCTransmitter/examples/RCTransmitter/include",
                 "c:/Users/thao/Documents/Arduino/libraries/RCTransmitter/examples/RCTransmitter",
                 ""
             ],
@@ -78,6 +81,7 @@
                     "c:/Users/thao/Documents/Arduino/libraries/BlynkESP8266_Lib",
                     "c:/Users/thao/Documents/Arduino/libraries/CayenneLPP",
                     "c:/Users/thao/Documents/Arduino/libraries/CayenneMQTT/src",
+                    "c:/Users/thao/Documents/Arduino/libraries/Curibot-Sensor/src",
                     "c:/Users/thao/Documents/Arduino/libraries/DAC_MCP49xx",
                     "c:/Users/thao/Documents/Arduino/libraries/EEPROMEx",
                     "c:/Users/thao/Documents/Arduino/libraries/EasyRF",
@@ -91,6 +95,7 @@
                     "c:/Users/thao/Documents/Arduino/libraries/Spiderbot",
                     "c:/Users/thao/Documents/Arduino/libraries/TinyArm",
                     "c:/Users/thao/Documents/Arduino/libraries/TinyGSM",
+                    "c:/Users/thao/Documents/Arduino/libraries/UMake",
                     "c:/Users/thao/Documents/Arduino/libraries/WiFiManager",
                     "c:/Users/thao/Documents/Arduino/libraries/ZowiVbot",
                     "c:/Users/thao/Documents/Arduino/libraries/esp8266BlynkCar",
@@ -122,13 +127,12 @@
                     "C:/Users/thao/.platformio/packages/framework-arduinoavr/libraries/Temboo/src",
                     "C:/Users/thao/.platformio/packages/framework-arduinoavr/libraries/WiFi/src",
                     "C:/Users/thao/.platformio/packages/tool-unity",
-                    "c:/Users/thao/Documents/Arduino/libraries/RCTransmitter/examples/RCTransmitter/include",
                     "c:/Users/thao/Documents/Arduino/libraries/RCTransmitter/examples/RCTransmitter",
                     ""
                 ]
             },
             "defines": [
-                "PLATFORMIO=30603",
+                "PLATFORMIO=30607",
                 "ARDUINO_AVR_UNO",
                 "F_CPU=16000000L",
                 "ARDUINO_ARCH_AVR",
@@ -139,7 +143,7 @@
             "intelliSenseMode": "clang-x64",
             "cStandard": "c11",
             "cppStandard": "c++11",
-            "compilerPath": "C:/Users/thao/.platformio/packages/toolchain-atmelavr/bin/avr-gcc.exe -mmcu=atmega328p"
+            "compilerPath": "\"C:/Users/thao/.platformio/packages/toolchain-atmelavr/bin/avr-gcc.exe\" -mmcu=atmega328p"
         }
     ],
     "version": 4

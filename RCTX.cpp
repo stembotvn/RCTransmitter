@@ -4,14 +4,22 @@ void nRFRemote::init(){
 Serial.begin(115200);
 SPI.begin();
 loadConfig();
+radio.RFpowerDown();//////////////;///////////
+delay(500);
+radio.RFpowerUp(); 
+radio.setDataSpeed(RF24_1MBPS);
+radio.setChannelRF(108);
+radio.setPowerRF(RF24_PA_LOW); 
+radio.setDynamicPayload(false);
+radio.setAutoACK(true);
 radio.init(myNode);//init RF and setting Master Node address 
    #ifdef DEBUG 
-         Serial.print("Dongle begin with address: ");
+         Serial.print("Remote Controller begin with address: ");
          Serial.println(myNode);
          Serial.print("State now: ");
         Serial.println(State);
     #endif
- pinMode(KEY,INPUT_PULLUP);  
+  pinMode(KEY,INPUT_PULLUP);  
 	pinMode(BF, INPUT);
 	pinMode(BB, INPUT);
 	pinMode(BR, INPUT);
@@ -40,13 +48,20 @@ bitWrite(keyState,4,!digitalRead(F1));
 bitWrite(keyState,5,!digitalRead(F2)); 
 bitWrite(keyState,6,!digitalRead(F3)); 
 bitWrite(keyState,7,!digitalRead(F4)); 
+varSlide1 = analogRead(SLIDE);
+
+// Serial.print("Slider raw value : "); Serial.println(varSlide1);
+
+varSlide1 = map(varSlide1,0,1023,100,0); //map slide to 0-100% 
+
+/*
 if (keyState!=lastState)  {   //when any change of keys
  
- varSlide1 = analogRead(SLIDE);
+ //varSlide1 = analogRead(SLIDE);
   #if DEBUG 
  Serial.print("Slider raw value : "); Serial.println(varSlide1);
  #endif
- varSlide1 = map(varSlide1,0,255,100,0); //map slide to 0-100% 
+ //varSlide1 = map(varSlide1,0,1023,100,0); //map slide to 0-100% 
 
  #if DEBUG 
  Serial.print("Button State change: "); Serial.println(keyState,BIN);
@@ -55,7 +70,8 @@ if (keyState!=lastState)  {   //when any change of keys
 
  State = RF_WRITE; 
  first_run = true; 
- lastState = keyState; 
+ lastState = keyState;
+ last_varSlide1 = varSlide1;  
 }
 else {
   if (keyState !=0)  {   // if any key press and hold, still send
@@ -63,7 +79,9 @@ else {
     first_run = true; 
     lastState = keyState;
   }
-}
+} */ 
+ State = RF_WRITE; 
+ first_run = true; 
 checkConfig(); //check if Config Key is pressed to issue new
 }
 ///////////////////////////////////////////////////////////////
@@ -76,7 +94,11 @@ void nRFRemote::writeRF(){
   buffer[index++] = 0x02; // SEND COMMAND TYPE
   buffer[index++] = 90;   // MARK AS REMOTE DATA
   buffer[index++] = keyState;   //send button Data
-  buffer[index++] = varSlide1;  //Send Slide value
+  buffer[index++] = (uint8_t)varSlide1;  //Send Slide value
+
+  int remote_data[2];
+  remote_data[0] = keyState;
+  remote_data[1] = varSlide1;
 
 int len = index + 1;
 buffer[2] = len-3;
@@ -84,14 +106,15 @@ buffer[2] = len-3;
          Serial.print("..Sending data to address: ");
          Serial.println(toNode);
    #endif
-bool OK = radio.RFSend(toNode,buffer,len);
+//bool OK = radio.RFSend(toNode,buffer,sizeof(buffer));
+  bool OK = radio.RFSend(toNode,remote_data,sizeof(remote_data));
   #ifdef DEBUG 
          Serial.print("Sent!.. ");
    #endif
 if (OK) {
-   State = RF_READ;  //if onnect and send successfully, go to read ack to check when robot action done  
+   State = SCAN;  //if onnect and send successfully, go to read ack to check when robot action done  
    first_run = true;      //set first run for next State
-
+   
    #ifdef DEBUG 
          Serial.print("Send Successfully to address: ");
          Serial.println(toNode);
@@ -99,7 +122,7 @@ if (OK) {
    #endif
 }
 else {
-   if (millis()-timeStart>timeout/2) {
+ //  if (millis()-timeStart>timeout/2) {
    State = SCAN;    //exit when time out
     first_run = true;      //set first run for next State
      #ifdef DEBUG 
@@ -107,7 +130,7 @@ else {
          Serial.println(toNode);
         Serial.println("Go to back to read Serial");
      #endif 
-   }
+ //  }
  }
 }
 //////////////////////
@@ -118,10 +141,10 @@ if ( radio.RFDataCome() )  {
 
     while (radio.RFDataCome()) {
 
-    read_size = radio.RFRead(buffer); 
+     radio.RFRead(Rbuffer,sizeof(Rbuffer)); 
     }
 
-    if (buffer[0]==0xFF && buffer[1] == 0x55 && buffer[2] == 13 && buffer[3]==10){
+    if (Rbuffer[0]==0xFF && Rbuffer[1] == 0x55 && Rbuffer[2] == 13 && Rbuffer[3]==10){
       
        #ifdef DEBUG 
     Serial.print("received valid acknowleadge");
@@ -131,7 +154,7 @@ if ( radio.RFDataCome() )  {
      first_run = true;      //set first run for next State
     // ready = true;
     }
-    else if (read_size<4)  {
+    else  {
       #ifdef DEBUG
       Serial.println("invalid data received"); 
       #endif
@@ -176,7 +199,7 @@ switch (State) {
   writeRF();
   }
   break;
-
+  
   case RF_READ :{
   readAck();
   }
@@ -255,7 +278,7 @@ CFGbuffer[2] = len-3;
   }
   Serial.println();
   #endif
-bool OK=radio.RFSend(DEFAULT_ADDRESS,CFGbuffer,len);
+bool OK=radio.RFSend(DEFAULT_ADDRESS,CFGbuffer,sizeof(CFGbuffer));
 if (OK) { 
   #ifdef DEBUG
   Serial.println("Sent Config addressing successful ");
